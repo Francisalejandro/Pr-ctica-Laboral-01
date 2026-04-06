@@ -1,0 +1,36 @@
+<div class="listado-container">
+  <h3>Listado de Ubicaciones de Cuba</h3>
+  <button (click)="seleccionService.limpiar()">
+    Limpiar Selección
+  </button>
+
+  <input
+    type="text"
+    [ngModel]="filtro"
+    (ngModelChange)="aplicarFiltro($event)"
+    placeholder="Filtrar por nombre, descripción o categoría"
+    class="filtro-input"
+  />
+
+  <ul class="lista">
+    @for (ubicacion of ubicaciones$ | async; track ubicacion.id) {
+      <li
+        (click)="seleccionarUbicacion(ubicacion)"
+        [class.activo]="ubicacionSeleccionada?.id === ubicacion.id"
+        [class.seleccionado]="estaSeleccionado(ubicacion)"
+      >
+        <input
+          type="checkbox"
+          [checked]="estaSeleccionado(ubicacion)"
+          (click)="$event.stopPropagation()"
+          (change)="toggleSeleccion(ubicacion)"
+        />
+        <span class="nombre">{{ ubicacion.nombre }}</span>
+        <span class="categoria">{{ capitalizarPrimeraLetra(ubicacion.categoria) }}</span>
+        <span class="descripcion">{{ ubicacion.descripcion }}</span>
+      </li>
+    } @empty {
+      <li class="sin-resultados">No se encontraron lugares</li>
+    }
+  </ul>
+</div>
